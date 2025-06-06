@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>House Rent Prediction</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .form-wrapper {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .form-wrapper:hover {
+            transform: translateY(-5px) scale(1.02);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        label {
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        input, select {
+            padding: 0.8rem 1.2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus, select:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 10px rgba(52, 152, 219, 0.2);
+            outline: none;
+            background: white;
+        }
+
+        input[type="submit"] {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            width: auto;
+            margin: 1.5rem auto 0;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input[type="submit"]:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .prediction {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #e8f4fc, #d4e7fa);
+            border-radius: 15px;
+            text-align: center;
+            color: #2c3e50;
+            font-size: 1.3rem;
+            border-left: 5px solid #3498db;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .emoji-container {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+        }
+
+        .house-emoji {
+            position: absolute;
+            font-size: 3rem;
+            animation: floatUp 8s linear infinite;
+        }
+
+        .tree-emoji {
+            position: absolute;
+            font-size: 2rem;
+            animation: fallDown 6s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(360deg); }
+        }
+
+        @keyframes fallDown {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .form-wrapper {
+                padding: 1.5rem;
+            }
+            
+            .form-group {
+                grid-template-columns: 1fr;
+                gap: 0.8rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="emoji-container">
+        <!-- Left side houses -->
+        <div class="house-emoji" style="left: 10%; animation-delay: 0s">🏠</div>
+        <div class="house-emoji" style="left: 15%; animation-delay: 2s">🏡</div>
+        <!-- Right side houses -->
+        <div class="house-emoji" style="right: 10%; animation-delay: 1s">🏘️</div>
+        <div class="house-emoji" style="right: 15%; animation-delay: 3s">🏚️</div>
+        <!-- Falling trees -->
+        <div class="tree-emoji" style="left: 20%; animation-delay: 0.5s">🌳</div>
+        <div class="tree-emoji" style="left: 30%; animation-delay: 2.5s">🌲</div>
+        <div class="tree-emoji" style="right: 25%; animation-delay: 1.5s">🎄</div>
+        <div class="tree-emoji" style="right: 35%; animation-delay: 3.5s">🌴</div>
+    </div>
+
+    <div class="container">
+        <h2>🏠 Predict House Rent 🌆</h2>
+        <div class="form-wrapper">
+            <form action="/predict" method="post">
+                <div class="form-group">
+                    <label>BHK:</label>
+                    <input type="number" name="BHK" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Size (sq.ft):</label>
+                    <input type="number" name="Size" min="100" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Area Type:</label>
+                    <select name="Area_Type" required>
+                        <option value="Built Area">Built Area</option>
+                        <option value="Super Area">Super Area</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>City:</label>
+                    <select name="City" required>
+                        <option value="Mumbai">Mumbai</option>
+                        <option value="Bangalore">Bangalore</option>
+                        <option value="Chennai">Chennai</option>
+                        <option value="Delhi">Delhi</option>
+                        <option value="Hyderabad">Hyderabad</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Furnishing Status:</label>
+                    <select name="Furnishing_Status" required>
+                        <option value="Semi-Furnished">Semi-Furnished</option>
+                        <option value="Furnished">Furnished</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Bathroom:</label>
+                    <input type="number" name="Bathroom" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Floor Level:</label>
+                    <input type="number" name="Floor_Level" min="0" required>
+                </div>
+
+                <input type="submit" value="Predict Rent">
+            </form>
+        </div>
+
+        {% if prediction_text %}
+            <div class="prediction">
+                <h3>{{ prediction_text }}</h3>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
